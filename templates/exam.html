@@ -1,52 +1,54 @@
 <script>
-  submitExam = function() {
+  submitExam = function () {
     var outNum, inNum;
     var q1Prompt, q2Prompt, q3Prompt;
     if (document.getElementById("q1out").checked) {
       outNum++;
-      q1Prompt = "他在美麗的花田和古老的廢墟中選擇了古老的廢墟。他對神秘和未知的事物感到好奇，喜歡挑戰和探索。"
-    }
-    else if (document.getElementById("q1in").checked) {
+      q1Prompt =
+        "他在美麗的花田和古老的廢墟中選擇了古老的廢墟。他對神秘和未知的事物感到好奇，喜歡挑戰和探索。";
+    } else if (document.getElementById("q1in").checked) {
       inNum++;
-      q1Prompt = "他在美麗的花田和古老的廢墟中選擇了美麗的花田。他喜歡美麗和和平的事物，傾向於尋找生活中的快樂和安慰。"
-    }
-    else {
+      q1Prompt =
+        "他在美麗的花田和古老的廢墟中選擇了美麗的花田。他喜歡美麗和和平的事物，傾向於尋找生活中的快樂和安慰。";
+    } else {
       alert("題目一並未作答");
       return;
     }
 
     if (document.getElementById("q2out").checked) {
       outNum++;
-      q2Prompt = "他在獨自欣賞湖泊和與陌生人一起上船中選擇了陌生人一起上船。他喜歡與人互動，享受與他人分享經歷和建立新關係。"
-    }
-    else if (document.getElementById("q2in").checked) {
+      q2Prompt =
+        "他在獨自欣賞湖泊和與陌生人一起上船中選擇了陌生人一起上船。他喜歡與人互動，享受與他人分享經歷和建立新關係。";
+    } else if (document.getElementById("q2in").checked) {
       inNum++;
-      q2Prompt = "他在獨自欣賞湖泊和與陌生人一起上船中選擇了獨自欣賞湖泊。你更享受獨處和內心的寧靜，喜歡沉浸在自己的世界裡。"
-    }
-    else {
+      q2Prompt =
+        "他在獨自欣賞湖泊和與陌生人一起上船中選擇了獨自欣賞湖泊。你更享受獨處和內心的寧靜，喜歡沉浸在自己的世界裡。";
+    } else {
       alert("題目二並未作答");
       return;
     }
 
     if (document.getElementById("q3out").checked) {
       outNum++;
-      q3Prompt = "他在平靜的寺院和熱鬧的市場中選擇了熱鬧的市場。他喜歡與人交流和互動，享受熱鬧和繁忙的生活。"
-    }
-    else if (document.getElementById("q3in").checked) {
+      q3Prompt =
+        "他在平靜的寺院和熱鬧的市場中選擇了熱鬧的市場。他喜歡與人交流和互動，享受熱鬧和繁忙的生活。";
+    } else if (document.getElementById("q3in").checked) {
       inNum++;
-      q3Prompt = "他在平靜的寺院和熱鬧的市場中選擇了平靜的寺院。他渴望平和與寧靜，喜歡在安靜中思考和冥想。"
-    }
-    else {
+      q3Prompt =
+        "他在平靜的寺院和熱鬧的市場中選擇了平靜的寺院。他渴望平和與寧靜，喜歡在安靜中思考和冥想。";
+    } else {
       alert("題目三並未作答");
       return;
     }
 
-    var prompt = "我們要為客人推篇他在台灣高雄的旅遊行程，我們準備的行程內容是：\n";
+    var prompt =
+      "我們要為客人推篇他在台灣高雄的旅遊行程，我們準備的行程內容是：\n";
     if (outNum > inNum) {
-      prompt += "早上：蓮池潭、左營古城\n中午：西子灣、旗津渡輪、旗津老街\n下午： 打狗英國領事館、駁二藝術特區\n晚上：美麗島捷運站、六合夜市、瑞豐夜市\n";
-    }
-    else {
-      prompt += "早上：高雄市立美術館、高雄市立歷史博物館\n中午：漢神巨蛋購物廣場\n下午：高雄中央圖書館、駁二藝術特區\n晚上：高雄85大樓觀景台";
+      prompt +=
+        "早上：蓮池潭、左營古城\n中午：西子灣、旗津渡輪、旗津老街\n下午： 打狗英國領事館、駁二藝術特區\n晚上：美麗島捷運站、六合夜市、瑞豐夜市\n";
+    } else {
+      prompt +=
+        "早上：高雄市立美術館、高雄市立歷史博物館\n中午：漢神巨蛋購物廣場\n下午：高雄中央圖書館、駁二藝術特區\n晚上：高雄85大樓觀景台";
     }
 
     prompt += "這位客人在性格測驗中表示：\n";
@@ -54,54 +56,98 @@
     prompt += "- " + q2Prompt + "\n";
     prompt += "- " + q3Prompt + "\n";
 
-    prompt += "請寫一個專門為他推薦我們準備的行程的短文。你要用「你」來稱呼他。你不能在推薦的短文中提到性格測驗的事。"
+    prompt +=
+      "請寫一個專門為他推薦我們準備的行程的短文。你要用「你」來稱呼他。你不能在推薦的短文中提到性格測驗的事。";
 
     var result = "";
     fetch("/prompt", {
-      "method": "POST",
-      "body": prompt
+      method: "POST",
+      body: prompt,
     })
-    .then((res) => res.text())
-    .then((text) => {
-      document.getElementById("result-texts").innerText = text;
-      document.getElementById("result-box").style.display = "block";
-    });
+      .then((res) => res.text())
+      .then((text) => {
+        document.getElementById("result-texts").innerText = text;
+        document.getElementById("result-box").style.display = "block";
+      });
+  };
+</script>
+<script>
+  let selectedImage = null;
+  function selectImage(imageElement) {
+    if (selectedImage) {
+      selectedImage.classList.remove("border-4");
+      selectedImage.classList.remove("border-blue-500");
+    }
+    imageElement.classList.add("border-4");
+    imageElement.classList.add("border-blue-500");
+    selectedImage = imageElement;
   }
 </script>
-<h1>AI性格測驗旅遊建議</h1><br />
-<p style="font-size: 1.3em;">Demo: 在一些問題之後，我們把使用者分成內向/外向/中立</p><br />
+<script src="../tailwind.css"></script>
+<!-- <div style="float: left"> -->
+<h1>AI性格測驗旅遊建議</h1>
+<br />
+<p style="font-size: 1.3em">
+  Demo: 在一些問題之後，我們把使用者分成內向/外向/中立
+</p>
+<br />
 <hr />
-<div style="margin: 10px 10%; text-align: center;">
+<div style="margin: 10px 10%; text-align: center">
   <form>
-    <h3>題目一：神秘的森林</h3><br/>
-    你走進了一片神秘的森林，樹木茂密，陽光透過樹葉灑下斑駁的光影。突然，你發現了一條分岔路。左邊的小徑通向一片美麗的花田，右邊的小徑通向一座古老的廢墟。你會選擇走哪條路？
-    <div style="margin: 0 auto 20px auto; width: fit-content;">
-      <label>
-        <input id="q1out" type="radio" name="q1" value="out" />
-        <span>古老的廢墟：你對神秘和未知的事物感到好奇，喜歡挑戰和探索。</span>
+    <h3>題目一：神秘的森林</h3>
+    <br />
+    你走進了一片神秘的森林，樹木茂密，陽光透過樹葉灑下斑駁的光影。當你穿過森林，你會看到？
+    <!-- <div style="margin: 0 auto 20px auto; width: fit-content"> -->
+    <div class="flex flex-row justify-between m-10">
+      <label class="flex items-center space-x-2">
+        <input id="q1out" type="radio" name="q1" value="out" class="hidden" />
+        <div class="flex-col">
+          <div class="mb-2">古老的廢墟</div>
+          <img
+            class="rounded-lg w-96 h-72 transition-transform transition-opacity duration-300 transform hover:scale-105 hover:opacity-80"
+            src="../images/Ancient_Ruins.jpg"
+            alt="古老的廢墟"
+            onclick="selectImage(this)"
+          />
+        </div>
       </label>
-      <label>
-        <input id="q1in" type="radio" name="q1" value="in" />
-        <span>美麗的花田：你喜歡美麗和和平的事物，傾向於尋找生活中的快樂和安慰。</span>
+      <label class="flex items-center space-x-2">
+        <div class="flex-col">
+          <input id="q1in" type="radio" name="q1" value="in" class="hidden" />
+          <div class="mb-2">美麗的花田</div>
+          <img
+            class="rounded-lg w-96 h-72 transition-transform transition-opacity duration-300 transform hover:scale-105 hover:opacity-80"
+            src="../images/Flower_Field.jpg"
+            alt="美麗的花田"
+            onclick="selectImage(this)"
+          />
+        </div>
       </label>
     </div>
+
     <hr />
-    <h3>題目二：寧靜的湖泊</h3><br/>
+    <h3>題目二：寧靜的湖泊</h3>
+    <br />
     你繼續在森林中前行，發現了一個寧靜的湖泊。湖泊中央有一艘小船，船上有兩個座位。你可以選擇繼續獨自欣賞湖泊的美景，或者邀請一位陌生人一起上船。你會選擇？
-    <div style="margin: 0 auto 20px auto; width: fit-content;">
+    <div style="margin: 0 auto 20px auto; width: fit-content">
       <label>
         <input id="q2in" type="radio" name="q2" value="in" />
-        <span>繼續獨自欣賞湖泊的美景：你更享受獨處和內心的寧靜，喜歡沉浸在自己的世界裡。</span>
+        <span
+          >繼續獨自欣賞湖泊的美景：你更享受獨處和內心的寧靜，喜歡沉浸在自己的世界裡。</span
+        >
       </label>
       <label>
         <input id="q2out" type="radio" name="q2" value="out" />
-        <span>邀請一位陌生人一起上船：你喜歡與人互動，享受與他人分享經歷和建立新關係。</span>
+        <span
+          >邀請一位陌生人一起上船：你喜歡與人互動，享受與他人分享經歷和建立新關係。</span
+        >
       </label>
     </div>
     <hr />
-    <h3>題目三：古老的鏡子</h3><br/>
+    <h3>題目三：古老的鏡子</h3>
+    <br />
     打開盒子後，你發現裡面有一面古老的鏡子。當你凝視鏡子時，鏡中出現了兩個不同的場景：一個是平靜的寺院，一個是熱鬧的市場。你會選擇進入哪個場景？
-    <div style="margin: 0 auto 20px auto; width: fit-content;">
+    <div style="margin: 0 auto 20px auto; width: fit-content">
       <label>
         <input id="q3in" type="radio" name="q3" value="in" />
         <span>平靜的寺院：你渴望平和與寧靜，喜歡在安靜中思考和冥想。</span>
@@ -113,11 +159,14 @@
     </div>
     <hr />
     <br />
-    <button style="cursor: pointer;" type="button" onclick="submitExam();">送出</button>
+    <button style="cursor: pointer" type="button" onclick="submitExam();">
+      送出
+    </button>
   </form>
   <br />
-  <div id="result-box" style="text-align: left; display: none;">
+  <div id="result-box" style="text-align: left; display: none">
     <b>AI:</b><br />
     <span id="result-texts"></span>
   </div>
 </div>
+<!-- </div> -->
