@@ -1,17 +1,35 @@
 <script>
   submitLyrics = function() {
-    
+    prompt = "這是原本的歌詞：「怎麼去擁有，一道彩虹？怎麼去擁抱，一夏天的風？天上的星星，笑地上的人。總是不能懂，不能覺得足夠。」\n";
+    prompt += "請發揮創意，在不明顯增加歌詞長度的情況下，把這個歌詞和以下的元素做有趣的結合：\n"
+    prompt += "- 「" + document.getElementById("user-input").value + "」\n"
+    prompt += "- 「高雄」\n"
+    prompt += "- 「櫻花季」\n"
+    prompt += "只提供重寫的歌詞即可，不需要提供對話、解釋或任何其他東西"
+    fetch("/prompt", {
+      "method": "POST",
+      "body": prompt
+    })
+    .then((res) => res.text())
+    .then((text) => {
+      document.getElementById("result-texts").innerText = text;
+      document.getElementById("result-box").style.display = "block";
+    })
   }
 </script>
 <h1>AI創意歌詞</h1><br />
-<p style="font-size: 1.3em;">原本的歌詞：<br />「怎麼去擁有，一道彩虹？怎麼去擁抱，一夏天的風？天上的星星，笑地上的人。總是不能懂，不能覺得足夠。」</p><br />
-<p style="font-size: 1.3em;">輸入你想要穿插在歌詞裡的元素：</p><br />
+<p style="font-size: 1.2em;">原本的歌詞：<br />「怎麼去擁有，一道彩虹？怎麼去擁抱，一夏天的風？天上的星星，笑地上的人。總是不能懂，不能覺得足夠。」</p><br />
+<p style="font-size: 1.2em;">輸入你想要穿插在歌詞裡的元素：</p><br />
 
 <div class="form__group">
-    <input type="text" class="form__input" id="name" placeholder="範例: 煙火" required="" />
-    <label for="name" class="form__label">元素</label>
-    <div class="button-group">
-        <button type="button" onclick="submitLyrics();">送出</button>
-        <button type="reset">重設</button>
-      </div>
+  <input type="text" class="form__input" id="user-input" placeholder="範例: 煙火" required="" />
+  <label for="name" class="form__label">元素</label>
+  <div class="button-group">
+    <button type="button" onclick="submitLyrics();">送出</button>
+    <button type="reset">重設</button>
+  </div>
+  <div id="result-box" style="text-align: left; display: none;">
+    <b>AI改寫的歌詞:</b><br />
+    <span id="result-texts"></span>
+  </div>
 </div>
