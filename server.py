@@ -11,18 +11,31 @@ bedrock_runtime = boto3.client(
     region_name="us-west-2",
 )
 
-# Call Mistral model
-def call_mistral_8x7b(prompt):
-    prompt_config = {
-        "prompt": prompt,
-        "max_tokens": 4096,
-        "temperature": 0.7,
-        "top_p": 0.8,
+# Call to stable diffusion
+def generate_image_sd(text, style):
+    """
+    Purpose:
+        Uses Bedrock API to generate an Image
+    Args/Requests:
+         text: Prompt
+         style: style for image
+    Return:
+        image: base64 string of image
+    """
+    body = {
+        "text_prompts": [{"text": text}],
+        "cfg_scale": 10,
+        "seed": 0,
+        "steps": 50,
+        "style_preset": style,
     }
 
-    body = json.dumps(prompt_config)
+    if style == "None":
+        del body["style_preset"]
 
-    modelId = "mistral.mixtral-8x7b-instruct-v0:1"
+    body = json.dumps(body)
+
+    modelId = "stability.stable-diffusion-xl-v1"
     accept = "application/json"
     contentType = "application/json"
 
@@ -31,35 +44,11 @@ def call_mistral_8x7b(prompt):
     )
     response_body = json.loads(response.get("body").read())
 
-    results = response_body.get("outputs")[0].get("text")
-    return results
-
-# Call Mistral model
-def call_mistral_7b(prompt):
-    prompt_config = {
-        "prompt": prompt,
-        "max_tokens": 4096,
-        "temperature": 0.7,
-        "top_p": 0.8,
-    }
-
-    body = json.dumps(prompt_config)
-
-    modelId = "mistral.mistral-7b-instruct-v0:2"
-    accept = "application/json"
-    contentType = "application/json"
-
-    response = bedrock_runtime.invoke_model(
-        body=body, modelId=modelId, accept=accept, contentType=contentType
-    )
-    response_body = json.loads(response.get("body").read())
-
-    results = response_body.get("outputs")[0].get("text")
+    results = response_body.get("artifacts")[0].get("base64")
     return results
 
 # Call Claude model
 def call_claude_haiku(prompt):
-
     prompt_config = {
         "anthropic_version": "bedrock-2023-05-31",
         "max_tokens": 1000,
@@ -181,6 +170,33 @@ def exam():
 def prompt():
     prompt = request.data.decode()
     result = call_claude(prompt)
+    return result
+
+sd_presets = [
+    "None",
+    "3d-model",
+    "analog-film",
+    "anime",
+    "cinematic",
+    "comic-book",
+    "digital-art",
+    "enhance",
+    "fantasy-art",
+    "isometric",
+    "line-art",
+    "low-poly",
+    "modeling-compound",
+    "neon-punk",
+    "origami",
+    "photographic",
+    "pixel-art",
+    "tile-texture",
+]
+
+@app.route('/prompt-image', methods=['post'])
+def prompt_image():
+    prompt = request.data.decode()
+    result = generate_image_sd(prompt, "None")
     return result
 
 @app.route('/style.css')

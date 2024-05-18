@@ -1,0 +1,43 @@
+<script>
+    submitImage = function() {
+      prompt = "具有以下元素的圖片";
+      var themes = ["戶外搖滾音樂節", "台灣", "高雄", "瘋狂", "熱血"]
+      var ads = ["滅火器", "海尼根", "打火機"];
+      var elems = themes + ads;
+      for (let k in elems) {
+        prompt += "- " + elems[k] + "\n";
+      }
+      prompt += "- " + document.getElementById("user-input").value;
+      fetch("/prompt-image", {
+        "method": "POST",
+        "body": prompt
+      })
+      .then((res) => res.text())
+      .then((base64String) => {
+        // Create an image element
+        const img = document.createElement('img');
+
+        // Set the src attribute to the base64 string
+        img.src = `data:image/png;base64,${base64String}`;
+
+        // Optionally set attributes like width and height
+        img.width = 100;
+        img.height = 100;
+
+        // Append the image to the container
+        document.getElementById('result-box').style.display = "block";
+        document.getElementById('result-box').appendChild(img);
+      })
+    }
+  </script>
+<h1>AI創意生圖</h1><br />
+<div class="form__group">
+    <input type="text" class="form__input" id="user-input" placeholder="範例: 機車" required="" />
+    <label for="name" class="form__label">元素</label>
+    <div class="button-group">
+      <button style="cursor: pointer;"  type="button" onclick="submitImage();">送出</button>
+    </div>
+    <div id="result-box" style="text-align: left; display: none;">
+      <b>AI生的圖:</b><br />
+    </div>
+</div>
