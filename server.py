@@ -166,6 +166,10 @@ def hello_world():
 def exam():
     return render_template('main.html', html_file='exam.html')
 
+@app.route('/image')
+def image():
+    return render_template('main.html', html_file='image.html')
+
 @app.route('/prompt', methods=['post'])
 def prompt():
     prompt = request.data.decode()
