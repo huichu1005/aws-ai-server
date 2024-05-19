@@ -27,7 +27,7 @@
     };
     submitImage = function() {
         var promptTheme = "The real photo style, stage, crazy, yolo, rock, outdoor, music festival in Kaohsiung, Taiwan with";
-        var ads = " {fire extinguisher:0.5}, {Heineken:0.5}, {lighter:0.5}, and";
+        var ads = " {fire extinguisher:0.1}, {Heineken:0.1}, {lighter:0.1}, and";
         var mainPrompts = promptTheme + ads;
         if (userInput != document.getElementById("user-input").value) {
             userInput = document.getElementById("user-input").value;
@@ -38,7 +38,7 @@
             })
             .then((res) => res.text())
             .then((text) => {
-                completePrompt = mainPrompts + ` {${text.trim()}:0.5}.`;
+                completePrompt = mainPrompts + ` {${text.trim()}:0.9}.`;
                 callImagePrompt(completePrompt);
             });
         }
