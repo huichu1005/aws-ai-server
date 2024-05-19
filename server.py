@@ -176,7 +176,11 @@ from flask import Flask, render_template, send_file
 app = Flask(__name__)
 
 @app.route('/')
-def hello_world():
+def index_page():
+    return send_file('index.html')
+
+@app.route('/lyrics')
+def lyrics():
     return render_template('main.html', html_file='lyrics.html')
 
 @app.route('/exam')
