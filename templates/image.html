@@ -11,7 +11,7 @@
         })
         .then((res) => res.text())
         .then((text) => {
-            var completePrompt = JSON.stringify(mainPrompts.concat([text]));
+            var completePrompt = JSON.stringify(mainPrompts.concat([text.trim()]));
             console.log(completePrompt);
             fetch("/prompt-image", {
                 "method": "POST",
@@ -31,7 +31,7 @@
                 // Append the image to the container
                 document.getElementById('result-box').style.display = "block";
                 document.getElementById('result-box').appendChild(img);
-                document.getElementById('result-box') += "<br />";
+                document.getElementById('result-box').innerHTML += "<br />";
             });
         });
     }
