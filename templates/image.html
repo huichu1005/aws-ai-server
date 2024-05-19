@@ -27,7 +27,7 @@
     };
     submitImage = function() {
         var promptTheme = "The crazy hot-blooded outdoor rock music festival in Kaohsiung, Taiwan with";
-        var ads = " a fire extinguisher, Heineken, lighters, and";
+        var ads = " {a fire extinguisher:0.5}, {Heineken:0.5}, {lighters:0.5}, and";
         var mainPrompts = promptTheme + ads;
         if (userInput != document.getElementById("user-input").value) {
             userInput = document.getElementById("user-input").value;
@@ -38,7 +38,7 @@
             })
             .then((res) => res.text())
             .then((text) => {
-                completePrompt = mainPrompts + text;
+                completePrompt = mainPrompts + `{${text}:0.5}.`;
                 callImagePrompt(completePrompt);
             });
         }
