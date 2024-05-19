@@ -1,43 +1,40 @@
 <script>
     submitImage = function() {
-      prompt = "台灣高雄的瘋狂熱血戶外搖滾音樂節，裡面有";
-      var ads = ["滅火器", "海尼根", "打火機"];
-      console.log(prompt);
-      for (let k in ads) {
-        prompt += ads[k] + "、";
-      }
-      prompt += "和" + document.getElementById("user-input").value;
-      console.log(prompt);
-      var translatePrompt = `Translate to English: "${prompt}"`
-      var englishPrompt = "";
-      fetch("/prompt", {
-        "method": "POST",
-        "body": translatePrompt
-      })
-      .then((res) => {res.text()})
-      .then((text) => {
-        englishPrompt = text;
-      });
-      fetch("/prompt-image", {
-        "method": "POST",
-        "body": englishPrompt
-      })
-      .then((res) => res.text())
-      .then((base64String) => {
-        // Create an image element
-        const img = document.createElement('img');
+        prompt = "台灣高雄的瘋狂熱血戶外搖滾音樂節，裡面有";
+        var ads = ["滅火器", "海尼根", "打火機"];
+        for (let k in ads) {
+            prompt += ads[k] + "、";
+        }
+        prompt += "和" + document.getElementById("user-input").value;
+        var translatePrompt = `Translate to English: "${prompt}"`
+        fetch("/prompt", {
+            "method": "POST",
+            "body": translatePrompt
+        })
+        .then((res) => {res.text()})
+        .then((text) => {
+            var englishPrompt = text;
+            fetch("/prompt-image", {
+                "method": "POST",
+                "body": englishPrompt
+            })
+            .then((res) => res.text())
+            .then((base64String) => {
+                // Create an image element
+                const img = document.createElement('img');
 
-        // Set the src attribute to the base64 string
-        img.src = `data:image/png;base64,${base64String}`;
+                // Set the src attribute to the base64 string
+                img.src = `data:image/png;base64,${base64String}`;
 
-        // Optionally set attributes like width and height
-        img.width = 1024;
-        img.height = 1024;
+                // Optionally set attributes like width and height
+                img.width = 1024;
+                img.height = 1024;
 
-        // Append the image to the container
-        document.getElementById('result-box').style.display = "block";
-        document.getElementById('result-box').appendChild(img);
-      })
+                // Append the image to the container
+                document.getElementById('result-box').style.display = "block";
+                document.getElementById('result-box').appendChild(img);
+            });
+        });
     }
 </script>
 <h1>AI創意生圖</h1><br />
@@ -45,9 +42,9 @@
     AI會生成大港開唱主題的圖片，你可以輸入你想要穿插在裡面的元素：
     <input type="text" class="form__input" id="user-input" placeholder="範例: 機車" required="" />
     <div class="button-group">
-      <button style="cursor: pointer;" type="button" onclick="submitImage();">送出</button>
+        <button style="cursor: pointer;" type="button" onclick="submitImage();">送出</button>
     </div>
     <div id="result-box" style="text-align: left; display: none;">
-      <b>AI生的圖:</b><br />
+        <b>AI生的圖:</b><br />
     </div>
 </div>
