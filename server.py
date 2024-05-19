@@ -221,7 +221,7 @@ sd_presets = [
 def prompt_image():
     prompt = request.data.decode()
     print('Receive image prompt:', prompt)
-    result = generate_image_sd(prompt, "None")
+    result = generate_image_sd(prompt, "photographic")
     # result = generate_image_titan(prompt)
     print('Replied:', result[:16], '...')
     print('---')
