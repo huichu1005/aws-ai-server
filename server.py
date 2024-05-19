@@ -24,9 +24,9 @@ def generate_image_sd(text, style):
         image: base64 string of image
     """
     body = {
-        "text_prompts": [{"text": text, "weight": 10}],
+        "text_prompts": [{"text": text, "weight": 5}],
         "cfg_scale": 10,
-        "seed": 0,
+        "seed": random.randint(0, 1 << 32 - 1),
         "steps": 50,
         "style_preset": style,
         "width": 512,
