@@ -50,6 +50,42 @@ def generate_image_sd(text, style):
     results = response_body.get("artifacts")[0].get("base64")
     return results
 
+def generate_image_titan(text):
+    """
+    Purpose:
+        Uses Bedrock API to generate an Image using Titan
+    Args/Requests:
+         text: Prompt
+    Return:
+        image: base64 string of image
+    """
+    body = {
+        "textToImageParams": {"text": text},
+        "taskType": "TEXT_IMAGE",
+        "imageGenerationConfig": {
+            "cfgScale": 10,
+            "seed": 0,
+            "quality": "standard",
+            "width": 512,
+            "height": 512,
+            "numberOfImages": 1,
+        },
+    }
+
+    body = json.dumps(body)
+
+    modelId = "amazon.titan-image-generator-v1"
+    accept = "application/json"
+    contentType = "application/json"
+
+    response = bedrock_runtime.invoke_model(
+        body=body, modelId=modelId, accept=accept, contentType=contentType
+    )
+    response_body = json.loads(response.get("body").read())
+
+    results = response_body.get("images")[0]
+    return results
+
 # Call Claude model
 def call_claude_haiku(prompt):
     prompt_config = {
@@ -135,28 +171,6 @@ def call_titan(prompt):
     return results
 
 
-def call_llama2(prompt):
-    prompt_config = {
-        "prompt": prompt,
-        "max_gen_len": 2048,
-        "top_p": 0.9,
-        "temperature": 0.2,
-    }
-
-    body = json.dumps(prompt_config)
-
-    modelId = "meta.llama2-13b-chat-v1"
-    accept = "application/json"
-    contentType = "application/json"
-
-    response = bedrock_runtime.invoke_model(
-        body=body, modelId=modelId, accept=accept, contentType=contentType
-    )
-    response_body = json.loads(response.get("body").read())
-
-    results = response_body["generation"].strip()
-    return results
-
 from flask import Flask, render_template, send_file
 
 app = Flask(__name__)
@@ -208,6 +222,7 @@ def prompt_image():
     prompt = request.data.decode()
     print('Receive image prompt:', prompt)
     result = generate_image_sd(prompt, "None")
+    # result = generate_image_titan(prompt)
     print('Replied:', result[:16], '...')
     print('---')
     return result

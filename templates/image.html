@@ -26,8 +26,8 @@
         });
     };
     submitImage = function() {
-        var promptTheme = "The crazy hot-blooded outdoor rock music festival in Kaohsiung, Taiwan with";
-        var ads = " {a fire extinguisher:0.5}, {Heineken:0.5}, {lighters:0.5}, and";
+        var promptTheme = "The real photo style, stage, crazy, yolo, rock, outdoor, music festival in Kaohsiung, Taiwan with";
+        var ads = " {fire extinguisher:0.5}, {Heineken:0.5}, {lighter:0.5}, and";
         var mainPrompts = promptTheme + ads;
         if (userInput != document.getElementById("user-input").value) {
             userInput = document.getElementById("user-input").value;
@@ -38,14 +38,13 @@
             })
             .then((res) => res.text())
             .then((text) => {
-                completePrompt = mainPrompts + `{${text}:0.5}.`;
+                completePrompt = mainPrompts + ` {${text.trim()}:0.5}.`;
                 callImagePrompt(completePrompt);
             });
         }
         else {
             callImagePrompt(completePrompt);
         }
-        
     }
 </script>
 <h1>AI創意生圖</h1><br />
