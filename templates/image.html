@@ -38,7 +38,7 @@
             })
             .then((res) => res.text())
             .then((text) => {
-                completePrompt = mainPrompts + text.trim();
+                completePrompt = mainPrompts + text.trim() + ".";
                 callImagePrompt(completePrompt);
             });
         }
