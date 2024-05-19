@@ -173,8 +173,10 @@ def image():
 @app.route('/prompt', methods=['post'])
 def prompt():
     prompt = request.data.decode()
-    print('Receive text prompt:', prompt)
+    print('Received text prompt:', prompt)
     result = call_claude(prompt)
+    print('Replied:', result)
+    print('---')
     return result
 
 sd_presets = [
@@ -203,6 +205,8 @@ def prompt_image():
     prompt = request.data.decode()
     print('Receive image prompt:', prompt)
     result = generate_image_sd(prompt, "None")
+    print('Replied:', result[:16], '...')
+    print('---')
     return result
 
 @app.route('/style.css')
