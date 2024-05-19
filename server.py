@@ -26,7 +26,7 @@ def generate_image_sd(text, style):
     body = {
         "text_prompts": [{"text": text}],
         "cfg_scale": 10,
-        "seed": random.randint(0, 1 << 32 - 1),
+        "seed": 0,
         "steps": 50,
         "style_preset": style,
         "width": 512,
