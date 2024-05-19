@@ -3,6 +3,7 @@
         var promptTheme = ["The crazy hot-blooded outdoor rock music festival in Kaohsiung, Taiwan"];
         var ads = ["a fire extinguisher", "Heineken", "lighters", ];
         var mainPrompts = promptTheme.concat(ads);
+        var useInput = document.getElementById("user-input").value;
         var translatePrompt = `Reply only the translation of this sentence in English: "${userInput}"`
         fetch("/prompt", {
             "method": "POST",
