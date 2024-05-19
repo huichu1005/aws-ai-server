@@ -3,6 +3,7 @@ import boto3
 import json
 import os
 import time
+import random
 from flask import Flask, send_file, render_template, request
 
 
@@ -12,18 +13,33 @@ bedrock_runtime = boto3.client(
     region_name="us-west-2",
 )
 
-# Call Mistral model
-def call_mistral_8x7b(prompt):
-    prompt_config = {
-        "prompt": prompt,
-        "max_tokens": 4096,
-        "temperature": 0.7,
-        "top_p": 0.8,
+# Call to stable diffusion
+def generate_image_sd(text, style):
+    """
+    Purpose:
+        Uses Bedrock API to generate an Image
+    Args/Requests:
+         text: Prompt
+         style: style for image
+    Return:
+        image: base64 string of image
+    """
+    body = {
+        "text_prompts": [{"text": text, "weight": 5}],
+        "cfg_scale": 10,
+        "seed": random.randint(0, 1 << 32 - 1),
+        "steps": 50,
+        "style_preset": style,
+        "width": 512,
+        "height": 512
     }
 
-    body = json.dumps(prompt_config)
+    if style == "None":
+        del body["style_preset"]
 
-    modelId = "mistral.mixtral-8x7b-instruct-v0:1"
+    body = json.dumps(body)
+
+    modelId = "stability.stable-diffusion-xl-v1"
     accept = "application/json"
     contentType = "application/json"
 
@@ -32,21 +48,34 @@ def call_mistral_8x7b(prompt):
     )
     response_body = json.loads(response.get("body").read())
 
-    results = response_body.get("outputs")[0].get("text")
+    results = response_body.get("artifacts")[0].get("base64")
     return results
 
-# Call Mistral model
-def call_mistral_7b(prompt):
-    prompt_config = {
-        "prompt": prompt,
-        "max_tokens": 4096,
-        "temperature": 0.7,
-        "top_p": 0.8,
+def generate_image_titan(text):
+    """
+    Purpose:
+        Uses Bedrock API to generate an Image using Titan
+    Args/Requests:
+         text: Prompt
+    Return:
+        image: base64 string of image
+    """
+    body = {
+        "textToImageParams": {"text": text},
+        "taskType": "TEXT_IMAGE",
+        "imageGenerationConfig": {
+            "cfgScale": 10,
+            "seed": 0,
+            "quality": "standard",
+            "width": 512,
+            "height": 512,
+            "numberOfImages": 1,
+        },
     }
 
-    body = json.dumps(prompt_config)
+    body = json.dumps(body)
 
-    modelId = "mistral.mistral-7b-instruct-v0:2"
+    modelId = "amazon.titan-image-generator-v1"
     accept = "application/json"
     contentType = "application/json"
 
@@ -55,12 +84,11 @@ def call_mistral_7b(prompt):
     )
     response_body = json.loads(response.get("body").read())
 
-    results = response_body.get("outputs")[0].get("text")
+    results = response_body.get("images")[0]
     return results
 
 # Call Claude model
 def call_claude_haiku(prompt):
-
     prompt_config = {
         "anthropic_version": "bedrock-2023-05-31",
         "max_tokens": 1000,
@@ -144,28 +172,6 @@ def call_titan(prompt):
     return results
 
 
-def call_llama2(prompt):
-    prompt_config = {
-        "prompt": prompt,
-        "max_gen_len": 2048,
-        "top_p": 0.9,
-        "temperature": 0.2,
-    }
-
-    body = json.dumps(prompt_config)
-
-    modelId = "meta.llama2-13b-chat-v1"
-    accept = "application/json"
-    contentType = "application/json"
-
-    response = bedrock_runtime.invoke_model(
-        body=body, modelId=modelId, accept=accept, contentType=contentType
-    )
-    response_body = json.loads(response.get("body").read())
-
-    results = response_body["generation"].strip()
-    return results
-
 from flask import Flask, render_template, send_file
 
 app = Flask(__name__, static_url_path='/images', static_folder='images')
@@ -173,17 +179,59 @@ if __name__ == '__main__':
     app.run(debug=True)
     
 @app.route('/')
-def hello_world():
+def index_page():
+    return send_file('index.html')
+
+@app.route('/lyrics')
+def lyrics():
     return render_template('main.html', html_file='lyrics.html')
 
 @app.route('/exam')
 def exam():
     return render_template('main.html', html_file='exam.html')
 
+@app.route('/image')
+def image():
+    return render_template('main.html', html_file='image.html')
+
 @app.route('/prompt', methods=['post'])
 def prompt():
     prompt = request.data.decode()
+    print('Received text prompt:', prompt)
     result = call_claude(prompt)
+    print('Replied:', result)
+    print('---')
+    return result
+
+sd_presets = [
+    "None",
+    "3d-model",
+    "analog-film",
+    "anime",
+    "cinematic",
+    "comic-book",
+    "digital-art",
+    "enhance",
+    "fantasy-art",
+    "isometric",
+    "line-art",
+    "low-poly",
+    "modeling-compound",
+    "neon-punk",
+    "origami",
+    "photographic",
+    "pixel-art",
+    "tile-texture",
+]
+
+@app.route('/prompt-image', methods=['post'])
+def prompt_image():
+    prompt = request.data.decode()
+    print('Receive image prompt:', prompt)
+    result = generate_image_sd(prompt, "photographic")
+    # result = generate_image_titan(prompt)
+    print('Replied:', result[:16], '...')
+    print('---')
     return result
 
 @app.route('/style.css')
