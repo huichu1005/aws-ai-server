@@ -75,12 +75,30 @@
   let selectedImage = null;
   function selectImage(imageElement) {
     if (selectedImage) {
-      selectedImage.classList.remove("border-4");
-      selectedImage.classList.remove("border-blue-500");
+      console.log(selectedImage.id);
+      if (
+        (selectedImage.id === "q1img1" && imageElement.id === "q1img2") ||
+        (selectedImage.id === "q1img2" && imageElement.id === "q1img1")
+      ) {
+        selectedImage.classList.remove("border-4", "border-blue-500");
+      }
+      if (
+        (selectedImage.id === "q2img1" && imageElement.id === "q2img2") ||
+        (selectedImage.id === "q2img2" && imageElement.id === "q2img1")
+      ) {
+        selectedImage.classList.remove("border-4", "border-blue-500");
+      }
+      if (
+        (selectedImage.id === "q3img1" && imageElement.id === "q3img2") ||
+        (selectedImage.id === "q3img2" && imageElement.id === "q3img1")
+      ) {
+        selectedImage.classList.remove("border-4", "border-blue-500");
+      }
     }
     imageElement.classList.add("border-4");
     imageElement.classList.add("border-blue-500");
     selectedImage = imageElement;
+    console.log(selectedImage.id);
   }
 </script>
 <script src="../tailwind.css"></script>
@@ -96,17 +114,18 @@
   <form>
     <h3>題目一：神秘的森林</h3>
     <br />
-    你走進了一片神秘的森林，樹木茂密，陽光透過樹葉灑下斑駁的光影。當你穿過森林，你會看到？
+    你走進了一片神秘的森林，樹木茂密，陽光透過樹葉灑下斑駁的光影。當你穿過森林，你會看到...
     <!-- <div style="margin: 0 auto 20px auto; width: fit-content"> -->
-    <div class="flex flex-row justify-between m-10">
+    <div class="flex flex-row justify-between m-4">
       <label class="flex items-center space-x-2">
         <input id="q1out" type="radio" name="q1" value="out" class="hidden" />
         <div class="flex-col">
           <div class="mb-2">古老的廢墟</div>
           <img
-            class="rounded-lg w-96 h-72 transition-transform transition-opacity duration-300 transform hover:scale-105 hover:opacity-80"
-            src="../images/Ancient_Ruins.jpg"
+            class="rounded-lg w-80 h-64 m-2 transition-transform transition-opacity duration-300 transform hover:scale-105 hover:opacity-80"
+            src="/images/Ancient_Ruins.jpg"
             alt="古老的廢墟"
+            id="q1img1"
             onclick="selectImage(this)"
           />
         </div>
@@ -116,9 +135,10 @@
           <input id="q1in" type="radio" name="q1" value="in" class="hidden" />
           <div class="mb-2">美麗的花田</div>
           <img
-            class="rounded-lg w-96 h-72 transition-transform transition-opacity duration-300 transform hover:scale-105 hover:opacity-80"
-            src="../images/Flower_Field.jpg"
+            class="rounded-lg w-80 h-64 m-2 transition-transform transition-opacity duration-300 transform hover:scale-105 hover:opacity-80"
+            src="./images/Flower_Field.jpg"
             alt="美麗的花田"
+            id="q1img2"
             onclick="selectImage(this)"
           />
         </div>
@@ -128,33 +148,67 @@
     <hr />
     <h3>題目二：寧靜的湖泊</h3>
     <br />
-    你繼續在森林中前行，發現了一個寧靜的湖泊。湖泊中央有一艘小船，船上有兩個座位。你可以選擇繼續獨自欣賞湖泊的美景，或者邀請一位陌生人一起上船。你會選擇？
-    <div style="margin: 0 auto 20px auto; width: fit-content">
+    你繼續在森林中前行，發現了一個寧靜的湖泊，你會...
+    <!-- <div style="margin: 0 auto 20px auto; width: fit-content"> -->
+    <div class="flex flex-row justify-between m-4">
       <label>
-        <input id="q2in" type="radio" name="q2" value="in" />
-        <span
-          >繼續獨自欣賞湖泊的美景：你更享受獨處和內心的寧靜，喜歡沉浸在自己的世界裡。</span
-        >
+        <input id="q2in" type="radio" name="q2" value="in" class="hidden" />
+        <div class="flex-col">
+          <div class="mb-2">獨自欣賞湖泊的美景</div>
+          <img
+            class="rounded-lg w-80 h-64 m-2 transition-transform transition-opacity duration-300 transform hover:scale-105 hover:opacity-80"
+            src="../images/Alone.jpg"
+            alt="獨自賞湖"
+            id="q2img1"
+            onclick="selectImage(this)"
+          />
+        </div>
       </label>
       <label>
-        <input id="q2out" type="radio" name="q2" value="out" />
-        <span
-          >邀請一位陌生人一起上船：你喜歡與人互動，享受與他人分享經歷和建立新關係。</span
-        >
+        <input id="q2out" type="radio" name="q2" value="out" class="hidden" />
+        <div class="flex-col">
+          <div class="mb-2">邀請陌生人一起划船</div>
+          <img
+            class="rounded-lg w-80 h-64 m-2 transition-transform transition-opacity duration-300 transform hover:scale-105 hover:opacity-80"
+            src="../images/Invitation.jpg"
+            alt="邀請陌生人"
+            id="q2img2"
+            onclick="selectImage(this)"
+          />
+        </div>
       </label>
     </div>
     <hr />
     <h3>題目三：古老的鏡子</h3>
     <br />
-    打開盒子後，你發現裡面有一面古老的鏡子。當你凝視鏡子時，鏡中出現了兩個不同的場景：一個是平靜的寺院，一個是熱鬧的市場。你會選擇進入哪個場景？
-    <div style="margin: 0 auto 20px auto; width: fit-content">
+    打開盒子後，你發現裡面有一面古老的鏡子。當你凝視鏡子時，你看到...
+    <!-- <div style="margin: 0 auto 20px auto; width: fit-content"> -->
+    <div class="flex flex-row justify-between m-4">
       <label>
-        <input id="q3in" type="radio" name="q3" value="in" />
-        <span>平靜的寺院：你渴望平和與寧靜，喜歡在安靜中思考和冥想。</span>
+        <input id="q3in" type="radio" name="q3" value="in" class="hidden" />
+        <div class="flex-col">
+          <div class="mb-2">平靜的寺院</div>
+          <img
+            class="rounded-lg w-80 h-64 m-2 transition-transform transition-opacity duration-300 transform hover:scale-105 hover:opacity-80"
+            src="../images/Temple.jpg"
+            alt="平靜的寺院"
+            id="q3img1"
+            onclick="selectImage(this)"
+          />
+        </div>
       </label>
       <label>
-        <input id="q3out" type="radio" name="q3" value="out" />
-        <span>熱鬧的市場：你喜歡與人交流和互動，享受熱鬧和繁忙的生活。</span>
+        <input id="q3out" type="radio" name="q3" value="out" class="hidden" />
+        <div class="flex-col">
+          <div class="mb-2">熱鬧的市場</div>
+          <img
+            class="rounded-lg w-80 h-64 m-2 transition-transform transition-opacity duration-300 transform hover:scale-105 hover:opacity-80"
+            src="../images/Market.jpg"
+            alt="熱鬧的市場"
+            id="q3img2"
+            onclick="selectImage(this)"
+          />
+        </div>
       </label>
     </div>
     <hr />

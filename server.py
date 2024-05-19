@@ -1,6 +1,7 @@
 import requests
 import boto3
 import json
+import os
 import time
 from flask import Flask, send_file, render_template, request
 
@@ -167,8 +168,10 @@ def call_llama2(prompt):
 
 from flask import Flask, render_template, send_file
 
-app = Flask(__name__)
-
+app = Flask(__name__, static_url_path='/images', static_folder='images')
+if __name__ == '__main__':
+    app.run(debug=True)
+    
 @app.route('/')
 def hello_world():
     return render_template('main.html', html_file='lyrics.html')
@@ -186,3 +189,7 @@ def prompt():
 @app.route('/style.css')
 def style():
     return send_file('style.css')
+
+@app.route('/tailwind.css')
+def taiwind():
+    return send_file('tailwind.css')
