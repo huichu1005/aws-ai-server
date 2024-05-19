@@ -1,21 +1,11 @@
 <script>
-    submitImage = function() {
-        var promptTheme = "The crazy hot-blooded outdoor rock music festival in Kaohsiung, Taiwan.";
-        var ads = " There is a fire extinguisher, Heineken, lighters, and";
-        var mainPrompts = promptTheme + ads;
-        var userInput = document.getElementById("user-input").value;
-        var translatePrompt = `Reply only the translation of the text in English: "${userInput}"`
-        fetch("/prompt", {
-            "method": "POST",
-            "body": translatePrompt
-        })
-        .then((res) => res.text())
-        .then((text) => {
-            var completePrompt = mainPrompts + text;
-            console.log(completePrompt);
+    var userInput = null;
+    var completePrompt = null;
+    callImagePrompt = function(prompt) {
+        console.log(prompt);
             fetch("/prompt-image", {
                 "method": "POST",
-                "body": completePrompt
+                "body": prompt
             })
             .then((res) => res.text())
             .then((base64String) => {
@@ -26,14 +16,36 @@
                 img.src = `data:image/png;base64,${base64String}`;
 
                 // Optionally set attributes like width and height
-                img.style.width = "100%";
+                img.style.width = "50%";
+                img.style.marginBottom = "10px";
 
                 // Append the image to the container
                 document.getElementById('result-box').style.display = "block";
                 document.getElementById('result-box').appendChild(img);
                 document.getElementById('result-box').innerHTML += "<br />";
-            });
         });
+    };
+    submitImage = function() {
+        var promptTheme = "The crazy hot-blooded outdoor rock music festival in Kaohsiung, Taiwan.";
+        var ads = " There is a fire extinguisher, Heineken, lighters, and";
+        var mainPrompts = promptTheme + ads;
+        if (userInput != document.getElementById("user-input").value) {
+            userInput = document.getElementById("user-input").value;
+            translatePrompt = `Reply only the translation of the text in English: "${userInput}"`;
+            fetch("/prompt", {
+                "method": "POST",
+                "body": translatePrompt
+            })
+            .then((res) => res.text())
+            .then((text) => {
+                completePrompt = mainPrompts + text;
+                callImagePrompt(completePrompt);
+            });
+        }
+        else {
+            callImagePrompt(completePrompt);
+        }
+        
     }
 </script>
 <h1>AI創意生圖</h1><br />
