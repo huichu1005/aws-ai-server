@@ -29,7 +29,7 @@ def generate_image_sd(prompt_list, style):
             for prompt in prompt_list
         ],
         "cfg_scale": 10,
-        "seed": random.randint(1 << 32 - 1),
+        "seed": random.randint(0, 1 << 32 - 1),
         "steps": 50,
         "style_preset": style,
         "width": 512,
