@@ -12,6 +12,8 @@
     prompt += "- 「" + document.getElementById("user-input").value + "」\n"
     prompt += "- 「高雄」\n"
     prompt += "- 「櫻花季」\n"
+    prompt += "- 「橘子可樂」\n"
+    prompt += "- 「閃靈海報」\n"
     prompt += "只提供重寫的歌詞即可，不需要提供對話、解釋或任何其他東西"
     fetch("/prompt", {
       "method": "POST",
@@ -39,10 +41,10 @@
 <div class="form__group">
   <input type="text" class="form__input" id="user-input" placeholder="範例: 煙火" required="" />
   <div class="button-group">
-    <button style="cursor: pointer;"  type="button" onclick="submitLyrics();">送出</button>
+    <button style="cursor: pointer;"  type="button" onclick="submitLyrics();">立即生成</button>
   </div>
   <div id="result-box" style="text-align: left; display: none;">
-    <b>AI改寫的歌詞:</b><br />
+    <b>AI給你的創意歌詞:</b><br />
     <span id="result-texts"></span>
   </div>
 </div>
