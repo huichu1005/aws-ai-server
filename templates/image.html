@@ -1,19 +1,16 @@
 <script>
     submitImage = function() {
-        prompt = "台灣高雄的瘋狂熱血戶外搖滾音樂節，裡面有";
-        var ads = ["滅火器", "海尼根", "打火機"];
-        for (let k in ads) {
-            prompt += ads[k] + "、";
-        }
-        prompt += "和" + document.getElementById("user-input").value;
-        var translatePrompt = `Reply only the translation of this sentence in English: "${prompt}"`
+        var promptTheme = ["The crazy hot-blooded outdoor rock music festival in Kaohsiung, Taiwan"];
+        var ads = ["a fire extinguisher", "Heineken", "lighters", ];
+        var mainPrompts = promptTheme.concat(ads);
+        var translatePrompt = `Reply only the translation of this sentence in English: "${userInput}"`
         fetch("/prompt", {
             "method": "POST",
             "body": translatePrompt
         })
         .then((res) => res.text())
         .then((text) => {
-            var englishPrompt = text;
+            var completePrompt = JSON.stringify(mainPrompts.concat([text]));
             console.log(text);
             fetch("/prompt-image", {
                 "method": "POST",
@@ -33,6 +30,7 @@
                 // Append the image to the container
                 document.getElementById('result-box').style.display = "block";
                 document.getElementById('result-box').appendChild(img);
+                document.getElementById('result-box') += "<br />";
             });
         });
     }

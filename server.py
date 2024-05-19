@@ -2,6 +2,7 @@ import requests
 import boto3
 import json
 import time
+import random
 from flask import Flask, send_file, render_template, request
 
 
@@ -12,20 +13,23 @@ bedrock_runtime = boto3.client(
 )
 
 # Call to stable diffusion
-def generate_image_sd(text, style):
+def generate_image_sd(prompt_list, style):
     """
     Purpose:
         Uses Bedrock API to generate an Image
     Args/Requests:
-         text: Prompt
+         prompt_list: Prompt list
          style: style for image
     Return:
         image: base64 string of image
     """
     body = {
-        "text_prompts": [{"text": text}],
+        "text_prompts": [
+            {"text": prompt}
+            for prompt in prompt_list
+        ],
         "cfg_scale": 10,
-        "seed": 0,
+        "seed": random.randint(1 << 32 - 1),
         "steps": 50,
         "style_preset": style,
         "width": 512,
@@ -204,9 +208,10 @@ sd_presets = [
 
 @app.route('/prompt-image', methods=['post'])
 def prompt_image():
-    prompt = request.data.decode()
-    print('Receive image prompt:', prompt)
-    result = generate_image_sd(prompt, "None")
+    prompt_json = request.data.decode()
+    prompt_list = json.loads(prompt_json)
+    print('Receive image prompt:', prompt_list)
+    result = generate_image_sd(prompt_list, "None")
     print('Replied:', result[:16], '...')
     print('---')
     return result
