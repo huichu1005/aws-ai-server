@@ -12,10 +12,10 @@
         .then((res) => res.text())
         .then((text) => {
             var completePrompt = JSON.stringify(mainPrompts.concat([text]));
-            console.log(text);
+            console.log(completePrompt);
             fetch("/prompt-image", {
                 "method": "POST",
-                "body": englishPrompt
+                "body": completePrompt
             })
             .then((res) => res.text())
             .then((base64String) => {
