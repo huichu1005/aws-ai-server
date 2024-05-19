@@ -2,6 +2,7 @@ import requests
 import boto3
 import json
 import time
+import random
 from flask import Flask, send_file, render_template, request
 
 
@@ -28,6 +29,8 @@ def generate_image_sd(text, style):
         "seed": 0,
         "steps": 50,
         "style_preset": style,
+        "width": 512,
+        "height": 512
     }
 
     if style == "None":
@@ -173,7 +176,10 @@ def image():
 @app.route('/prompt', methods=['post'])
 def prompt():
     prompt = request.data.decode()
+    print('Received text prompt:', prompt)
     result = call_claude(prompt)
+    print('Replied:', result)
+    print('---')
     return result
 
 sd_presets = [
@@ -200,7 +206,10 @@ sd_presets = [
 @app.route('/prompt-image', methods=['post'])
 def prompt_image():
     prompt = request.data.decode()
+    print('Receive image prompt:', prompt)
     result = generate_image_sd(prompt, "None")
+    print('Replied:', result[:16], '...')
+    print('---')
     return result
 
 @app.route('/style.css')
