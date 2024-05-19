@@ -28,6 +28,8 @@ def generate_image_sd(text, style):
         "seed": 0,
         "steps": 50,
         "style_preset": style,
+        "width": 512,
+        "height": 512
     }
 
     if style == "None":
