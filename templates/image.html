@@ -1,17 +1,26 @@
 <script>
     submitImage = function() {
-      prompt = "具有以下元素的圖片";
-      var themes = ["戶外搖滾音樂節", "台灣", "高雄", "瘋狂", "熱血"]
+      prompt = "台灣高雄的瘋狂熱血戶外搖滾音樂節，裡面有";
       var ads = ["滅火器", "海尼根", "打火機"];
-      var elems = themes + ads;
-      for (let k in elems) {
-        prompt += "- " + elems[k] + "\n";
-      }
-      prompt += "- " + document.getElementById("user-input").value;
       console.log(prompt);
+      for (let k in ads) {
+        prompt += ads[k] + "、";
+      }
+      prompt += "和" + document.getElementById("user-input").value;
+      console.log(prompt);
+      var translatePrompt = `Translate to English: "${prompt}"`
+      var englishPrompt = "";
+      fetch("/prompt", {
+        "method": "POST",
+        "body": translatePrompt
+      })
+      .then((res) => {res.text()})
+      .then((text) => {
+        englishPrompt = text;
+      });
       fetch("/prompt-image", {
         "method": "POST",
-        "body": prompt
+        "body": englishPrompt
       })
       .then((res) => res.text())
       .then((base64String) => {
@@ -30,7 +39,7 @@
         document.getElementById('result-box').appendChild(img);
       })
     }
-  </script>
+</script>
 <h1>AI創意生圖</h1><br />
 <div class="form__group">
     AI會生成大港開唱主題的圖片，你可以輸入你想要穿插在裡面的元素：
