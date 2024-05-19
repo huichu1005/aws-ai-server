@@ -13,21 +13,18 @@ bedrock_runtime = boto3.client(
 )
 
 # Call to stable diffusion
-def generate_image_sd(prompt_list, style):
+def generate_image_sd(text, style):
     """
     Purpose:
         Uses Bedrock API to generate an Image
     Args/Requests:
-         prompt_list: Prompt list
+         text: Prompt
          style: style for image
     Return:
         image: base64 string of image
     """
     body = {
-        "text_prompts": [
-            {"text": prompt}
-            for prompt in prompt_list
-        ],
+        "text_prompts": [{"text": text}],
         "cfg_scale": 10,
         "seed": random.randint(0, 1 << 32 - 1),
         "steps": 50,
@@ -208,10 +205,9 @@ sd_presets = [
 
 @app.route('/prompt-image', methods=['post'])
 def prompt_image():
-    prompt_json = request.data.decode()
-    prompt_list = json.loads(prompt_json)
-    print('Receive image prompt:', prompt_list)
-    result = generate_image_sd(prompt_list, "None")
+    prompt = request.data.decode()
+    print('Receive image prompt:', prompt)
+    result = generate_image_sd(prompt, "None")
     print('Replied:', result[:16], '...')
     print('---')
     return result
